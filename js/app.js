@@ -7,10 +7,10 @@
         app = express(),
         engines = require('consolidate'),
         ejs = require('ejs'),
+        fs = require("fs"),
         server = require('http').createServer(app);
 
 
-    app.set('views', '../views');
     app.engine('html', engines.ejs);
     app.set('view engine', 'html');
 
@@ -23,10 +23,20 @@
         moviesArr.push(media(movie));
     });
 
+    ejs.renderFile('./views/movies.view.ejs', {
+        movies: moviesArr
+    }, function (err, str) {
+        if (!err) {
+            fs.writeFile("./views/movies.view.html", str, function (err) {
+                if (!err) {
+                    console.log("saved");
+                }
+            });
+        }
+    });
+
     app.get("/", function (req, res) {
-        return res.status(200).render('movies.view.ejs', {
-            movies: moviesArr
-        });
+        return res.status(200).render("movies.view.html");
     });
 
     server.listen(3500, function () {
