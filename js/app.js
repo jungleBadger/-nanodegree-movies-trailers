@@ -29,9 +29,11 @@
             seriesArr.push(seriesCreator(serie));
         });
 
+        console.log(seriesArr.length);
+
         ejs.renderFile("./views/movies.view.ejs", {
-            movies: moviesArr,
-            series: seriesArr
+            "movies": moviesArr,
+            "series": seriesArr
         }, function (err, str) {
             if (!err) {
                 fs.writeFile("./views/movies.view.html", str, function (err) {
