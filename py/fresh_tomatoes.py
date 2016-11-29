@@ -62,8 +62,6 @@ main_page_head = '''
         (function () {
             "use strict";
 
-
-
             // Pause the video when the modal is closed
             $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
                 // Remove the src so the player itself gets removed, as this is the only
@@ -85,9 +83,7 @@ main_page_head = '''
             // Animate in the movies when the page loads
             $(document).ready(function () {
                 $('.movie-tile').hide().fadeIn();
-
             });
-
         }());
     </script>
 </head>
@@ -115,7 +111,7 @@ main_page_content = '''
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">Fresh Tomatoes Movie Trailers</a>
+            <a class="navbar-brand" href="#">Fresh Tomatoes Movie Trailers - Python</a>
           </div>
         </div>
       </div>
