@@ -8,7 +8,8 @@ toy_story = moviesChild.Movie("Toy Story",
                               "https://youtube.com/watch?v=vwyZH85NQC4", "120")
 
 o_invasor = moviesChild.Movie("O Invasor",
-                              "O INVASOR narra a historia de tres amigos companheiros desde os tempos de faculdade de engenharia " +
+                              "O INVASOR narra a historia de tres amigos companheiros" +
+                              " desde os tempos de faculdade de engenharia " +
                               "que sao socios em uma construtora ha mais de 15 anos. Tudo corre bem ate" +
                               " o dia em que um desentendimento na conducao dos negocios os coloca em conflito",
                               "https://upload.wikimedia.org/wikipedia/pt/b/b8/O_Invasor.jpg",
@@ -71,7 +72,11 @@ seinfeld = seriesChild.Series("Seinfeld",
                               "http://www.sonypictures.com/tv/seinfeld/assets/images/onesheet.jpg",
                               "https://www.youtube.com/watch?v=PaPxSsK6ZQA", "20")
 
-movies = [toy_story, o_invasor, things_i_hate, sucker_punch, carandiru, sunshine_mind]
-series = [ricky_and_morty, trailer_park_boys, seinfeld]
+movies = [toy_story, o_invasor,
+          things_i_hate, sucker_punch,
+          carandiru, sunshine_mind]
+
+series = [ricky_and_morty, trailer_park_boys,
+          seinfeld]
 
 fresh_tomatoes.open_movies_page(movies, series)
