@@ -7,7 +7,6 @@ Use classes abstraction to build a movies showcase that plays the respective tra
 ## Dependencies
 - EJS engines for node.js
 - Express framework for node
-- .env file with TWILIO_AUTH, TWILIO_SID and TWILIO_NO info
 
 ## Python
 - just run the script from /py/entertainment_center.py
