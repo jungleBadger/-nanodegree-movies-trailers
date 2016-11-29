@@ -9,6 +9,7 @@ main_page_head = '''
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fresh Tomatoes!</title>
 
     <!-- Bootstrap 3 -->
@@ -58,29 +59,36 @@ main_page_head = '''
         }
     </style>
     <script type="text/javascript" charset="utf-8">
-        // Pause the video when the modal is closed
-        $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
-            // Remove the src so the player itself gets removed, as this is the only
-            // reliable way to ensure the video stops playing in IE
-            $("#trailer-video-container").empty();
-        });
-        // Start playing the video whenever the trailer modal is opened
-        $(document).on('click', '.movie-tile', function (event) {
-            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
-            var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
-            $("#trailer-video-container").empty().append($("<iframe></iframe>", {
-              'id': 'trailer-video',
-              'type': 'text-html',
-              'src': sourceUrl,
-              'frameborder': 0
-            }));
-        });
-        // Animate in the movies when the page loads
-        $(document).ready(function () {
-          $('.movie-tile').hide().first().show("fast", function showNext() {
-            $(this).next("div").show("fast", showNext);
-          });
-        });
+        (function () {
+            "use strict";
+
+
+
+            // Pause the video when the modal is closed
+            $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
+                // Remove the src so the player itself gets removed, as this is the only
+                // reliable way to ensure the video stops playing in IE
+                $("#trailer-video-container").empty();
+            });
+            // Start playing the video whenever the trailer modal is opened
+            $(document).on('click', '.movie-tile > img', function (event) {
+                var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
+                var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
+                $("#trailer-video-container").empty().append($("<iframe></iframe>", {
+                  'id': 'trailer-video',
+                  'type': 'text-html',
+                  'src': sourceUrl,
+                  'frameborder': 0
+                }));
+            });
+
+            // Animate in the movies when the page loads
+            $(document).ready(function () {
+                $('.movie-tile').hide().fadeIn();
+
+            });
+
+        }());
     </script>
 </head>
 '''
@@ -113,8 +121,12 @@ main_page_content = '''
       </div>
     </div>
     <div class="container">
-      {movie_tiles}
+        <h2>Favorite Movies</h2>
+            {movie_tiles}
+        <h2>Favorite Series</h2>
+            {serie_tiles}
     </div>
+
   </body>
 </html>
 '''
@@ -122,41 +134,82 @@ main_page_content = '''
 
 # A single movie entry html template
 movie_tile_content = '''
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
-    <img src="{poster_image_url}" width="220" height="342">
+<div class="col-md-6 col-lg-4 movie-tile text-center">
+    <img data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer" src="{poster_image_url}" width="220" height="342">
     <h2>{movie_title}</h2>
+    <a class="btn btn-info glyphicon glyphicon-plus" aria-hidden="true" href="#collapseSample{movie_index}" data-toggle="collapse"></a>
+    <div class="collapse" id="collapseSample{movie_index}">
+        {movie_storyline}
+    </div>
 </div>
 '''
 
 
+serie_tile_content = '''
+<div class="col-md-6 col-lg-4 movie-tile text-center">
+    <img src="{poster_image_url}" width="220" height="342" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+    <h2>{serie_title}</h2>
+    <a class="btn btn-info glyphicon glyphicon-plus" aria-hidden="true" href="#collapseSample{serie_index}" data-toggle="collapse"></a>
+       <div class="collapse" id="collapseSample{serie_index}">
+        {serie_storyline}
+    </div>
+</div>
+'''
+
+
+def extract_youtube_id(youtube_url):
+    youtube_id_match = re.search(
+        r'(?<=v=)[^&#]+', youtube_url)
+    youtube_id_match = youtube_id_match or re.search(
+        r'(?<=be/)[^&#]+', youtube_url)
+    trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
+                          else None)
+
+    return trailer_youtube_id
 def create_movie_tiles_content(movies):
     # The HTML content for this section of the page
     content = ''
+    index = 0
     for movie in movies:
         # Extract the youtube ID from the url
-        youtube_id_match = re.search(
-            r'(?<=v=)[^&#]+', movie.trailer_youtube_url)
-        youtube_id_match = youtube_id_match or re.search(
-            r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
-        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
-                              else None)
+
+
 
         # Append the tile for the movie with its content filled in
         content += movie_tile_content.format(
-            movie_title=movie.title,
-            poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id
+            movie_index = "movie" + str(index),
+            movie_title = movie.title,
+            movie_storyline = movie.storyline,
+            poster_image_url = movie.poster_image_url,
+            trailer_youtube_id = extract_youtube_id(movie.trailer_youtube_url)
         )
+        index += 1;
     return content
 
 
-def open_movies_page(movies):
+def create_series_tiles_content(series):
+    content = ''
+    index = 0
+    for serie in series:
+        content += serie_tile_content.format(
+            serie_index = "serie" + str(index),
+            poster_image_url = serie.poster_image_url,
+            serie_title = serie.title,
+            serie_storyline = serie.storyline,
+            trailer_youtube_id = extract_youtube_id(serie.trailer_youtube_url)
+        )
+        index += 1;
+
+    return content
+
+def open_movies_page(movies, series):
     # Create or overwrite the output file
     output_file = open('fresh_tomatoes.html', 'w')
 
     # Replace the movie tiles placeholder generated content
     rendered_content = main_page_content.format(
-        movie_tiles=create_movie_tiles_content(movies))
+        movie_tiles=create_movie_tiles_content(movies),
+        serie_tiles = create_series_tiles_content(series))
 
     # Output the file
     output_file.write(main_page_head + rendered_content)
