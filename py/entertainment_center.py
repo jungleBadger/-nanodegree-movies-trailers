@@ -15,7 +15,8 @@ o_invasor = moviesChild.Movie("O Invasor",
                               "https://www.youtube.com/watch?v=O4wZgt0eiWg", "120")
 
 things_i_hate = moviesChild.Movie("10 Things I Hate About You",
-                                  "A pretty, popular teenager can't go out on a date until her ill-tempered older sister does.",
+                                  "A pretty, popular teenager can't go out on a date until her " +
+                                  "ill-tempered older sister does.",
                                   "https://upload.wikimedia.org/wikipedia/pt/7/76/10_Things_I_Hate_About_You.jpg",
                                   "https://www.google.com.br/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjNhJTnjcrQAhUBEZAKHWYjD8QQtwIIIDAA&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DAWmjzCZr0Jw&usg=AFQjCNESEvQOoFrbwr8JCtGAFt93mg_UOg&sig2=uqpeFb3bNKv661sl84legg", # NOQA
                                   "120")
